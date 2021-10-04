@@ -1,0 +1,204 @@
+
+<!DOCTYPE html>
+<html style="height: 100%">
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" type="text/css" href="./style.css">
+        <script type="text/javascript" src="data.js"></script>
+    </head>
+    <body style="height: 100%; margin: 0">
+        <div class="colors" style="margin-left: 10%;margin-top: 3%;">
+          <button onclick="location.href='https://framingvis.com/vast2021/'">  Back </button>
+                <label>
+                  <input type="radio" name="color" value="#a6cee3" onchange="getValue(this)" checked="checked">
+                  <span class="swatch" style="background-color:#a6cee3"></span> 
+                </label>
+                <label>
+                  <input type="radio" name="color" value="#1f78b4" onchange="getValue(this)">
+                  <span class="swatch" style="background-color:#1f78b4"></span> 
+                </label>
+                <label>
+                  <input type="radio" name="color" value="#b2df8a" onchange="getValue(this)">
+                  <span class="swatch" style="background-color:#b2df8a"></span> 
+                </label>
+                <label>
+                    <input type="radio" name="color" value="#33a02c" onchange="getValue(this)">
+                    <span class="swatch" style="background-color:#33a02c"></span> 
+                  </label>
+                  <label>
+                    <input type="radio" name="color" value="#fb9a99" onchange="getValue(this)">
+                    <span class="swatch" style="background-color:#fb9a99"></span> 
+                  </label>
+                  <label>
+                    <input type="radio" name="color" value="#e31a1c" onchange="getValue(this)">
+                    <span class="swatch" style="background-color:#e31a1c"></span> 
+                  </label>
+                  <label>
+                    <input type="radio" name="color" value="#fdbf6f" onchange="getValue(this)">
+                    <span class="swatch" style="background-color:#fdbf6f"></span> 
+                  </label>
+                  <label>
+                    <input type="radio" name="color" value="#ff7f00" onchange="getValue(this)">
+                    <span class="swatch" style="background-color:#ff7f00"></span> 
+                  </label>
+                  <label>
+                    <input type="radio" name="color" value="#cab2d6" onchange="getValue(this)">
+                    <span class="swatch" style="background-color:#cab2d6"></span> 
+                  </label>
+                  <label>
+                    <input type="radio" name="color" value="#6a3d9a" onchange="getValue(this)">
+                    <span class="swatch" style="background-color:#6a3d9a"></span> 
+                  </label>
+                  <label>
+                    <input type="radio" name="color" value="#ffff99" onchange="getValue(this)">
+                    <span class="swatch" style="background-color:#ffff99"></span> 
+                  </label>
+                  <label>
+                    <input type="radio" name="color" value="#b15928" onchange="getValue(this)">
+                    <span class="swatch" style="background-color:#b15928"></span> 
+                  </label>
+        </div> 
+        
+        <!-- <div id="container" style="height: 100%; width: 60%" ></div> -->
+        <!-- <div> 
+          tweets 
+          <div id="tweetsbox" style="border:1px solid black; width: 60%; height:fit-content">
+          </div>
+        </div> -->
+
+        <table style="height: 100%; width: 100%">
+          <tr>
+              <td style="height: 100%; width: 70%;" align="center">
+                <div id="container" style="height: 80%; width: 80%" ></div>
+              </td>
+              <td style="height: 100%; width: 30%">
+                  <div>
+                    Tweets 
+                    <div id="tweetsbox" style="border:2px solid #333; width:100%; height:50%; font-size: 10px;">
+                    </div>
+                    <br>
+                    Annoation
+                    <div id="Annoation">
+                      <span class="swatch" style="background-color: #a6cee3"></span> <textarea style="border:2px solid #333; width:100%; height:50%; font-size: 10px; margin-right: 10px;"></textarea>
+                    </div>
+                    </div>
+                  </div>
+              </td>
+          </tr>
+      </table>
+
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+
+        <script type="text/javascript">
+            function addClickFlag(data) {
+                for (var item of data) {
+                    item.push("false");
+                    item.push('grey')
+                }
+                return data
+            }
+
+            addClickFlag(originalData)
+
+            change(originalData)
+            function change(data) {
+                var dom = document.getElementById("container");
+                var myChart = echarts.init(dom);
+                var option = {
+                    xAxis: {},
+                    yAxis: {},
+                    tooltip: {
+                        formatter: function(param) {  
+                        var value = param.value;  
+                        return '<div style="border-bottom: 1px solid rgba(255,255,255,.3); font-size: 16px;padding-bottom: 7px;margin-bottom: 7px;"> ' + value[2]  + ', ' + value[3] 
+                            '</div>';  
+                        } 
+                    },
+                    series: [{
+                        symbolSize: 2,
+                        data: data,
+                        type: 'scatter',
+                        itemStyle: { normal: 
+                          { 
+                            color : '#FFFFFF',
+                            borderColor: '#333',
+                            borderWidth: 1
+                      }}
+                    }]
+                };
+                myChart.setOption(option, true)
+            }
+            
+            var currentColor = '#a6cee3'
+            var tweets = []
+
+            function getValue(radio){
+              currentColor = radio.value
+              tweets = []
+                //document.getElementById("tweetsbox").innerHTML = tweets;
+              showTweets()
+              var annoationbox = document.getElementById("Annoation");
+              annoationbox.innerHTML = '<span class="swatch" style="background-color:'+ currentColor +'"></span> <textarea style="border:2px solid #333; width:100%; height:50%; font-size: 10px; margin-right: 10px;"></textarea>'
+              console.log(annoationbox.innerHTML)
+            }
+
+            function showTweets() {
+              var tweetsString = '';
+              for ( var msg of tweets) {
+                tweetsString = tweetsString.concat(msg)
+              }
+              document.getElementById("tweetsbox").innerHTML = tweetsString;
+            }
+
+            var myChart = echarts.init(document.getElementById("container"))
+
+            myChart.on('click', (params) => {
+                if(params.data.value) {
+                  if (params.data.value[4] == "true") {
+                      var x = 0;
+                      for (let i = 0; i < tweets.length; i++) {
+                          const paramsmsg = params.data.value[2] + ' message: ' + params.data.value[3] + '<br>'
+                          if(tweets[i] == paramsmsg) {
+                            x = i
+                          }
+                        }
+                        tweets.splice(x, 1);
+                  }
+                } else {
+                    const onetweet = params.data[2] + ' message: ' + params.data[3] + '<br>'
+                    tweets.push(onetweet)
+                }
+                // document.getElementById("tweetsbox").innerHTML = tweets; 
+                showTweets()
+                originalData = originalData.map(v=> {
+                    if(v.value) {
+                        //console.log(params.data.value)
+                        if(v[0]==params.data[0] && v[1] == params.data[0] && v.value[4] == "true") {
+                            if(params.data.value[0] == v.value[0] && params.data.value[1] == v.value[1])
+                                v = [v.value[0],v.value[1], v.value[2], v.value[3], "false", "grey"]
+                            else v = {value:v.value, itemStyle: {normal: {color: v.value[5]}}}  
+                        } 
+                        else if(v.value[4] == "true") {
+                            v = {value:v.value, itemStyle: {normal: {color: v.value[5],  borderColor: v.value[5]}}}
+                        } else {
+                            v = v.value
+                        }
+                    }
+                    else if(v[0]==params.data[0] && v[1] == params.data[1]) {
+                        v = {value:[v[0],v[1], v[2], v[3], "true", currentColor], itemStyle: {normal: {color: currentColor, borderColor: currentColor }}}
+                    } 
+                    else {
+                        if(v.value) {
+                            v = v.value
+                        }
+                    }
+                    return v
+                })
+                change(originalData)
+            })
+
+
+        </script>
+    </body>
+</html>
+    
